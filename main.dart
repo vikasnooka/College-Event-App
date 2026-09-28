@@ -1,44 +1,62 @@
-class Event {
-  final String title;
-  final String description;
-  final String date;
-  final String time;
-  final String venue;
-  final String category;
+import 'package:flutter/material.dart';
+import '../models/event.dart';
 
-  Event({
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.time,
-    required this.venue,
-    required this.category,
+class EventDetailsScreen extends StatelessWidget {
+  final Event event;
+
+  const EventDetailsScreen({
+    super.key,
+    required this.event,
   });
-}
 
-final List<Event> events = [
-  Event(
-    title: 'Tech Fest 2026',
-    description: 'A technical festival featuring coding and technology competitions.',
-    date: '10 October 2026',
-    time: '10:00 AM',
-    venue: 'Main Auditorium',
-    category: 'Technical',
-  ),
-  Event(
-    title: 'Cultural Fest',
-    description: 'Enjoy music, dance, drama and other cultural performances.',
-    date: '15 October 2026',
-    time: '4:00 PM',
-    venue: 'College Ground',
-    category: 'Cultural',
-  ),
-  Event(
-    title: 'Sports Meet',
-    description: 'Annual inter-department sports competition.',
-    date: '20 October 2026',
-    time: '9:00 AM',
-    venue: 'Sports Complex',
-    category: 'Sports',
-  ),
-];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Event Details'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              event.title,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              event.description,
+              style: const TextStyle(fontSize: 17),
+            ),
+            const SizedBox(height: 25),
+            Text('📅 Date: ${event.date}'),
+            const SizedBox(height: 10),
+            Text('⏰ Time: ${event.time}'),
+            const SizedBox(height: 10),
+            Text('📍 Venue: ${event.venue}'),
+            const SizedBox(height: 10),
+            Text('🏷 Category: ${event.category}'),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Successfully registered!'),
+                    ),
+                  );
+                },
+                child: const Text('Register for Event'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
