@@ -1,138 +1,46 @@
-import 'package:flutter/material.dart';
-import '../models/event.dart';
-import 'event_details.dart';
-
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
-
-  @override
-  State<MainNavigation> createState() => _MainNavigationState();
-}
-
-class _MainNavigationState extends State<MainNavigation> {
-  int selectedIndex = 0;
-
-  final List<String> registeredEvents = [];
-
-  @override
-  Widget build(BuildContext context) {
-    final pages = [
-      _buildHome(),
-      _buildRegistrations(),
-      _buildProfile(),
-    ];
-
-    return Scaffold(
-      body: pages[selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bookmark_outline),
-            selectedIcon: Icon(Icons.bookmark),
-            label: 'My Events',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+return Card(
+  elevation: 3,
+  margin: const EdgeInsets.only(bottom: 16),
+  child: Padding(
+    padding: const EdgeInsets.all(12),
+    child: ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Colors.indigo.shade100,
+        child: const Icon(
+          Icons.event,
+          color: Colors.indigo,
+        ),
       ),
-    );
-  }
-
-  Widget _buildHome() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('College Events'),
+      title: Text(
+        event.title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: events.length,
-        itemBuilder: (context, index) {
-          final event = events[index];
-
-          return Card(
-            margin: const EdgeInsets.only(bottom: 15),
-            child: ListTile(
-              leading: const CircleAvatar(
-                child: Icon(Icons.event),
-              ),
-              title: Text(event.title),
-              subtitle: Text('${event.date}\n${event.venue}'),
-              isThreeLine: true,
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EventDetailsScreen(event: event),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildRegistrations() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Events'),
-      ),
-      body: registeredEvents.isEmpty
-          ? const Center(
-              child: Text('No registered events'),
-            )
-          : ListView.builder(
-              itemCount: registeredEvents.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(Icons.check_circle),
-                  title: Text(registeredEvents[index]),
-                );
-              },
-            ),
-    );
-  }
-
-  Widget _buildProfile() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: const Center(
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 45,
-              child: Icon(Icons.person, size: 45),
+            Text(event.description),
+            const SizedBox(height: 8),
+            Text('📅 ${event.date}'),
+            Text('📍 ${event.venue}'),
+            const SizedBox(height: 6),
+            Chip(
+              label: Text(event.category),
             ),
-            SizedBox(height: 15),
-            Text(
-              'Student',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text('student@college.edu'),
           ],
         ),
       ),
-    );
-  }
-}
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => EventDetailsScreen(event: event),
+          ),
+        );
+      },
+    ),
+  ),
+);
